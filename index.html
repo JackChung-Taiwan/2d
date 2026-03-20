@@ -18,20 +18,22 @@
             margin: 0; padding: 0; background-color: #000; color: var(--term-green);
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden; user-select: none; -webkit-user-select: none;
+            /* 使用 dvh 適應手機真實高度 */
+            height: 100dvh; 
         }
 
         /* CRT 螢幕掃描線特效 */
         #crt-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
             background-size: 100% 4px, 6px 100%; z-index: 999; pointer-events: none;
             opacity: 0.6;
         }
 
         #game-container {
-            width: 100vw; height: 100vh; display: flex; flex-direction: column;
+            width: 100vw; height: 100%; display: flex; flex-direction: column;
             background: radial-gradient(circle, #1a2a22 0%, #000000 80%);
-            padding: 20px;
+            padding: 15px;
         }
 
         /* --- 前言故事區 --- */
@@ -55,24 +57,24 @@
             position: relative;
         }
 
-        .sprite-container { position: relative; height: 250px; display: flex; align-items: flex-end;}
+        .sprite-container { position: relative; height: 230px; display: flex; align-items: flex-end;}
         
         .sprite-container img {
-            width: 200px; object-fit: contain; 
+            width: 180px; object-fit: contain; 
             filter: drop-shadow(0 0 10px rgba(0,255,0,0.3));
         }
 
         #player-sprite { transform: scaleX(-1); }
-        #boss-sprite { filter: drop-shadow(0 0 20px var(--boss-red)); width: 250px; }
+        #boss-sprite { filter: drop-shadow(0 0 20px var(--boss-red)); width: 220px; }
 
         /* 血條 UI */
         .status-box {
             width: 100%; border: 2px solid var(--term-green); background: rgba(0,20,0,0.8);
-            padding: 10px; margin-bottom: 15px; box-shadow: 0 0 10px rgba(0,255,0,0.2);
+            padding: 10px; margin-bottom: 10px; box-shadow: 0 0 10px rgba(0,255,0,0.2);
         }
         #boss-status { border-color: var(--boss-red); color: var(--boss-red); box-shadow: 0 0 10px rgba(255,0,0,0.2); }
 
-        .name-row { font-weight: bold; font-size: 1.2rem; margin-bottom: 5px; display: flex; justify-content: space-between; }
+        .name-row { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; display: flex; justify-content: space-between; }
         .hp-bar-bg { width: 100%; height: 15px; background: var(--hp-bg); border: 1px solid currentColor; margin-top: 5px;}
         .hp-bar-fill { height: 100%; transition: width 0.3s ease-out, background-color 0.3s; }
         
@@ -82,25 +84,28 @@
         /* --- 終端機文字框與 RWD 指令區 --- */
         #terminal-box {
             height: 250px; border: 3px solid var(--term-green); border-radius: 5px;
-            background: rgba(0, 0, 0, 0.9); padding: 15px;
-            font-size: 1.1rem; line-height: 1.6; text-shadow: 0 0 5px var(--term-green);
+            background: rgba(0, 0, 0, 0.9); padding: 12px;
+            font-size: 1.1rem; line-height: 1.5; text-shadow: 0 0 5px var(--term-green);
             display: flex; flex-direction: column; position: relative;
         }
         
-        #text-content { flex: 1; overflow-y: auto; margin-bottom: 10px; }
-        
+        /* 將按鈕區改到文字區上方 */
         #command-panel {
             display: none; 
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
-            gap: 10px; border-top: 1px dashed var(--term-green); padding-top: 10px;
+            gap: 8px; border-bottom: 1px dashed var(--term-green); 
+            padding-bottom: 10px; margin-bottom: 10px;
         }
         .cmd-btn {
             background: rgba(0, 20, 0, 0.8); color: var(--term-green); border: 1px solid var(--term-green);
-            padding: 8px 10px; font-family: inherit; font-size: 0.95rem; cursor: pointer; font-weight: bold;
+            padding: 8px; font-family: inherit; font-size: 0.95rem; cursor: pointer; font-weight: bold;
             transition: all 0.2s; text-align: left;
         }
         .cmd-btn:hover:not(:disabled) { background: var(--term-green); color: #000; }
         .cmd-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #555; color: #555; background: transparent; }
+
+        /* 紀錄文字區 (有卷軸) */
+        #text-content { flex: 1; overflow-y: auto; }
 
         /* 動畫區 */
         @keyframes dash-right { 0% { transform: translateX(0) scaleX(-1); } 50% { transform: translateX(150px) scaleX(-1) scale(1.1); filter: drop-shadow(0 0 20px #0f0); } 100% { transform: translateX(0) scaleX(-1); } }
@@ -121,21 +126,23 @@
         /* RWD 手機版調整 */
         @media (max-width: 768px) {
             #game-container { padding: 10px; }
-            #arena { flex-direction: column; justify-content: center; gap: 15px; }
+            #arena { flex-direction: column; justify-content: center; gap: 10px; }
             .entity { width: 100%; flex-direction: row; justify-content: space-between; align-items: center; }
             .sprite-container { height: 100px; }
             .sprite-container img { width: 90px; }
-            #boss-sprite { width: 110px; }
+            #boss-sprite { width: 100px; }
             .status-box { width: 65%; margin-bottom: 0; padding: 5px; }
             .name-row { font-size: 1rem; }
-            #terminal-box { height: 300px; font-size: 0.95rem; }
+            
+            /* 終端機高度在手機上稍微加大，確保上下兩區都清楚 */
+            #terminal-box { height: 280px; font-size: 0.95rem; }
             
             #command-panel { grid-template-columns: 1fr 1fr; } /* 手機版按鈕 2x2 排列 */
 
             .entity:nth-child(1) { order: 2; }
             .entity:nth-child(2) { order: 1; }
-            @keyframes dash-right { 0% { transform: translateY(0) scaleX(-1); } 50% { transform: translateY(-80px) scaleX(-1) scale(1.1); } 100% { transform: translateY(0) scaleX(-1); } }
-            @keyframes dash-left { 0% { transform: translateY(0) scaleX(-1); } 50% { transform: translateY(80px) scaleX(-1) scale(1.1); } 100% { transform: translateY(0) scaleX(-1); } }
+            @keyframes dash-right { 0% { transform: translateY(0) scaleX(-1); } 50% { transform: translateY(-60px) scaleX(-1) scale(1.1); } 100% { transform: translateY(0) scaleX(-1); } }
+            @keyframes dash-left { 0% { transform: translateY(0) scaleX(-1); } 50% { transform: translateY(60px) scaleX(-1) scale(1.1); } 100% { transform: translateY(0) scaleX(-1); } }
         }
     </style>
 </head>
@@ -164,13 +171,13 @@
         </div>
 
         <div id="terminal-box">
-            <div id="text-content"></div>
             <div id="command-panel">
                 <button class="cmd-btn" id="btn-attack" disabled>> std::attack()</button>
                 <button class="cmd-btn" id="btn-heavy" disabled>> sudo rm -rf /</button>
                 <button class="cmd-btn" id="btn-stun" disabled>> Ctrl+C (中斷)</button>
                 <button class="cmd-btn" id="btn-heal" disabled>> debug_heal()</button>
             </div>
+            <div id="text-content"></div>
         </div>
     </div>
 
